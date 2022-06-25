@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html lang="en" class="dark-theme">
+    <head>
+        <meta charset="utf-8">
+        <title>Redirecting...</title>
+
+        <style>
+            body {
+                background-color: #2b2b2b;
+                font-family: Arial, serif;
+            }
+            p {
+                color: #fff;
+                font-size: 2em;
+                padding: 0.5em;
+                text-align: center;
+            }
+            a {
+                color: #fff;
+            }
+        </style>
+
+        <script>
+            let loc
+            if (window.location.href.includes("?p=")) {
+                //Prevent infinite redirect incase of issue
+            } else {
+                loc = window.location.origin + "?p=" + window.location.pathname;
+                window.location.href = loc
+            }
+
+            function onLoad() {
+                document.getElementById('text').innerHTML = `If you are not redirected, <a href='${loc}'>Click Here</a>`
+            }
+        </script>
+    </head>
+
+    <body onload="onLoad()">
+        <p id="text">
+            If you are seeing this page, you have JavaScript disabled. This site requires JavaScript to function properly.
+        </p>
+    </body>
+</html>
