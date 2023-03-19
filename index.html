@@ -1,0 +1,618 @@
+<!doctype html>
+
+<html lang="en" class="dark-theme">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>PerfectAPlan</title>
+    <meta property="og:title" content="PerfectAPlan" />
+    <meta name="description" content="One place, to plan everything. Start planning today at perfectaplan.com." />
+    <meta property="og:description"
+        content="One place, to plan everything. Start planning today at perfectaplan.com." />
+
+    <meta name="robots" content="index, follow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://perfectaplan.com/res/thumb.png" />
+    <meta property="og:image:alt" content="PerfectAPlan Logo" />
+    <meta property="og:url" content="https://perfectaplan.com/" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+
+    <!-- Remove No JS message -->
+    <script>
+        function noJSRun() {
+            const noJS = document.getElementById('noJS')
+            if (noJS) {
+                noJS.parentElement.removeChild(noJS)
+            } else {
+                requestAnimationFrame(noJSRun)
+            }
+        }
+        noJSRun()
+    </script>
+
+    <!-- Styling -->
+    <link rel="stylesheet" href="main.css">
+    <link rel="icon" href="https://perfectaplan.com/res/icon.png">
+
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-app.js"></script>
+
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.9/firebase-storage.js"></script>
+
+    <script src="main.js"></script>
+
+</head>
+
+<body perfectAPlanVersion="v0.1.1-dev" onload="onPageLoad()">
+    <p id="versionText">Failed to load version - Copyright applies to current year - All rights reserved</p>
+    <div id="welcome">
+        <div id="welcome_title" class="title">
+            <p>Perfect</p>
+            <p>A</p>
+            <p>Plan</p>
+            <div id="loadingCircleContainer">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div id="noJS">
+                <p>
+                    If you're seeing this screen, you have JavaScript disabled. For this site to properly function,
+                    JavaScript is required.
+                </p>
+            </div>
+        </div>
+        <div id="welcomeContainer">
+            <div id="signup_container">
+                <div id="signup">
+                    <div id="signup_description">
+                        <h1>One place, to plan everything.</h1>
+                        <h2>Save hours of pointless labor.</h2>
+                    </div>
+                    <div id="signup_content">
+                        <label for="gettingStartedInput" content="Enter Email"></label>
+                        <div class="detailsFormInput">
+                            <svg>
+                                <use href="https://perfectaplan.com/res/map.svg#email"></use>
+                            </svg>
+                            <input onkeydown="if (event.code === 'Enter') {openSignup(1)}" id="gettingStartedInput"
+                                type="email" autocomplete="email" placeholder="Enter your email...">
+                        </div>
+                    </div>
+
+                    <div id="signup_content2">
+                        <button id="getStartedButton" onclick="openSignup(1)">Get Started</button>
+                        <p onclick="openSignup(2)">Already started? <p2>Log In</p2>
+                        </p>
+                    </div>
+                </div>
+                <div id="details">
+                    <h1 id="details_header"></h1>
+                    <h1 id="details_header2"></h1>
+                    <form id="detailsForm" onsubmit="processLogin(this)">
+                        <p class="input-hint">Email</p>
+                        <label for="emailInput" content="Email"></label>
+                        <div class="detailsFormInput">
+                            <svg>
+                                <use href="https://perfectaplan.com/res/map.svg#email"></use>
+                            </svg>
+                            <input id="emailInput" type="email" autocomplete="email" required
+                                placeholder="Enter your email...">
+                        </div>
+                        <p class="input-hint">Password</p>
+                        <label for="passwordInput" content="Password"></label>
+                        <div class="detailsFormInput">
+                            <svg>
+                                <use href="https://perfectaplan.com/res/map.svg#padlock"></use>
+                            </svg>
+                            <input id="passwordInput" type="password" minlength="8" required
+                                placeholder="Enter your password...">
+                            <p5 onclick="showPasswordButton(this)">Show</p5>
+                        </div>
+                        <br>
+                        <input type="submit" value="Sign Up">
+                        <p id="details-error-text" class="input-hint"></p>
+                        <p id="details-other-text" class="input-hint"></p>
+                    </form>
+                </div>
+            </div>
+
+            <div id="notice">
+                <div id="emailNotice">
+                    <p>Please verify your email by visiting your inbox.</p>
+                    <p>Some text2</p>
+                    <button onclick="window.location.reload()">I've Done It</button>
+                    <button onclick="handleChangeEmailButton()">Change Email</button>
+                    <p2 onclick="processSignOut()">Change Account</p2>
+                </div>
+                <div id="usernameNotice">
+                    <p1>You'll need a name.</p1>
+                    <p2>Enter a unique username</p2>
+                    <label for="usernameInput" content="Username"></label>
+                    <div class="detailsFormInput">
+                        <svg>
+                            <use href="https://perfectaplan.com/res/map.svg#user"></use>
+                        </svg>
+                        <input onkeydown="handleUsernameCheck((event.code === 'Enter'))"
+                            onkeyup="handleUsernameCheck((event.code === 'Enter'))" id="usernameInput" type="text"
+                            placeholder="Enter a username..." autocomplete="off">
+                    </div>
+                    <div class="warning">
+                        <svg>
+                            <use href="https://perfectaplan.com/res/map.svg#warning"></use>
+                        </svg>
+                        <p></p>
+                    </div>
+                    <button onclick="handleUsernameCheck(true)">That's Me!</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="content">
+        <div id="main">
+            <div id="header">
+                <div id="main_header">
+                    <p>Text</p>
+                </div>
+                <div id="workspace_header">
+                    <div id="headerProjectSpaceDisplay">
+                        <div>
+                            <div>
+
+                            </div>
+                        </div>
+                        <p>Name Here</p>
+                        <div>
+                            <svg>
+                                <use href="https://perfectaplan.com/res/map.svg#options"></use>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="headerVerticalDivider"></div>
+                    <div id="headerProjectMiddle">
+                        <div id="headerProjectViewsContainer">
+                            <div class="headerProjectViewArrow" onclick="handleHeaderViewArrow(true)">
+                                <svg>
+                                    <use href="https://perfectaplan.com/res/map.svg#moveLeft"></use>
+                                </svg>
+                            </div>
+                            <div id="headerProjectViews"></div>
+                            <div class="headerProjectViewArrow" onclick="handleHeaderViewArrow(false)">
+                                <svg>
+                                    <use href="https://perfectaplan.com/res/map.svg#moveLeft"></use>
+                                </svg>
+                            </div>
+                        </div>
+                        <div id="headerVerticalDividerCreateView" class="headerVerticalDivider"></div>
+                        <div id="headerProjectCreateView">
+                            <div>
+                                <svg>
+                                    <use href="https://perfectaplan.com/res/map.svg#add"></use>
+                                </svg>
+                                <p>View</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="headerProjectSettings"></div>
+                    <div id="headerProjectViewBottom">
+                        <div id="headerProjectViewSearch">
+                            <svg>
+                                <use href="https://perfectaplan.com/res/map.svg#search"></use>
+                            </svg>
+                            <input type="text" autocomplete="off" placeholder="Search for anything...">
+                            <svg>
+                                <use href="https://perfectaplan.com/res/map.svg#close"></use>
+                            </svg>
+                        </div>
+                        <div id="headerProjectViewBottomRight">
+                            <div class="headerProjectViewBottomButton headerProjectViewBottomSort">
+                                <svg>
+                                    <use href="https://perfectaplan.com/res/map.svg#sort"></use>
+                                </svg>
+                                <p>Sort By</p>
+                            </div>
+                            <div class="headerProjectViewBottomButton headerProjectViewBottomOptions">
+                                <svg>
+                                    <use href="https://perfectaplan.com/res/map.svg#options"></use>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="page">
+                <div id="home">
+                    <h1 id="greetUserText">Welcome, USERNAME!</h1>
+                    <div id="createProjectHome">
+                        <p>Create Project</p>
+                        <svg>
+                            <use href="https://perfectaplan.com/res/map.svg#add"></use>
+                        </svg>
+                    </div>
+                    <h2>Recent Spaces</h2>
+                    <div id="homeRecentSpaces">
+
+                    </div>
+                    <h2>Shared With You</h2>
+                    <div id="homeSharedWithYou">
+
+                    </div>
+                </div>
+                <!--                    <div id="notifications">-->
+                <!--                        <h1>TODO: Make notifications page</h1>-->
+                <!--                    </div>-->
+                <div id="workspace">
+                    <div id="tasksContainer"></div>
+                    <div id="notInAViewContainer">
+                        <div>
+                            <p>Some explanatory text</p>
+                            <p>Some explanatory text</p>
+                            <p>Some explanatory text</p>
+                            <p>Some explanatory text</p>
+                            <p>Some explanatory text</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="sidebar">
+            <svg onclick="handleCollapseButton(this)" id="collapseButton">
+                <use href="https://perfectaplan.com/res/map.svg#doubleArrow"></use>
+            </svg>
+            <div class="title" onclick="showPage('home')">
+                <p>Perfect</p>
+                <p>A</p>
+                <p>Plan</p>
+            </div>
+            <div id="sidebarButtons"></div>
+            <div class="sidebarDivider"></div>
+            <div id="loadedProjects"></div>
+            <div id="userProfile">
+                <img id="userProfileImage" alt="Your Image" class="userProfileImage"
+                    src="https://perfectaplan.com/res/unknownUser.png" onclick="settingsButton()">
+                <div id="userProfileContents" style="float: left;">
+                    <p id="userProfileName" class="userDisplayName">Username</p>
+                    <div id="selfUserButtonContainer">
+                        <button id="userSettingsButton" class="selfUserButton" onclick="settingsButton()">
+                            <svg>
+                                <use href="https://perfectaplan.com/res/map.svg#settings"></use>
+                            </svg>
+                            <p>Settings</p>
+                        </button>
+                        <button id="userSignoutButton" class="selfUserButton userSignoutButton"
+                            onclick="handleSignoutButton()">
+                            <svg>
+                                <use href="https://perfectaplan.com/res/map.svg#signOut"></use>
+                            </svg>
+                        </button>
+                        <div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="baseProjectViewSettingsContainer">
+        <div id="projectViewSettings">
+            <div id="projectViewTypesList">
+                <div>
+                    <svg>
+                        <use href="https://perfectaplan.com/res/map.svg#listView"></use>
+                    </svg>
+                    <label for="createViewNameInput"></label>
+                    <input id="createViewNameInput" placeholder="Enter name..." maxlength="20">
+                </div>
+                <p class="projectViewTypesListHeader">Pick a View</p>
+                <div id="projectViewTypesListContainer"></div>
+            </div>
+            <div id="projectViewSettingsContent">
+                <p id="projectViewSettingsContentHeader"></p>
+                <p id="projectViewSettingsContentDescription"></p>
+                <div id="projectViewSettingsToggles">
+                    <div id="projectViewSettingsPinned" class="fancyToggleDescription fancyDialog">
+                        <div class="fancyToggle"></div>
+                        <div>
+                            <h1>Pin View</h1>
+                        </div>
+                    </div>
+                    <div id="projectViewSettingsPersonal" class="fancyToggleDescription fancyDialog" selected="true">
+                        <div class="fancyToggle" selected="true"></div>
+                        <div>
+                            <h1>Personal View</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <button id="projectViewSaveSettingsButton" class="settingsSave">Add View</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="projectStatusSettingsContainer">
+        <div id="projectStatusSettings">
+            <svg id="projectStatusSettingsClose" class="settingsClose">>
+                <use href="https://perfectaplan.com/res/map.svg#close"></use>
+            </svg>
+            <p>Edit statuses for NAME</p>
+            <div id="projectStatusesContainer">
+
+            </div>
+            <div>
+                <button id="projectStatusesSaveSettingsButton" class="settingsSave">Save Settings</button>
+            </div>
+        </div>
+    </div>
+    <div id="baseProjectShareContainer">
+        <div id="projectShare">
+            <svg id="projectShareClose" class="settingsClose">>
+                <use href="https://perfectaplan.com/res/map.svg#close"></use>
+            </svg>
+            <p>Share NAME</p>
+            <p2>Shared With</p2>
+            <div id="projectShareContainer">
+
+            </div>
+            <button id="projectShareSave" class="settingsSave">Save Permissions</button>
+        </div>
+    </div>
+    <div id="yourSettingsContainer">
+        <div id="yourSettingsSidebar">
+            <div onclick="handleCloseSettingsButton()" id="settingsCloseButton" class="settingsButton">
+                <div>
+                    <svg>
+                        <use href="https://perfectaplan.com/res/map.svg#close"></use>
+                    </svg>
+                </div>
+                <p>Close</p>
+            </div>
+            <h1 id="settingsHeader">Settings</h1>
+            <p onclick="openSettingsPage(this)" class="settingsSelectable" pagename="account">Account</p>
+            <p onclick="openSettingsPage(this)" class="settingsSelectable" pagename="account"
+                scrollto="scrollToAppearanceSection">Appearance</p>
+            <!--                <p onclick="openSettingsPage(this)" class="settingsSelectable" pagename="notifications">Notifications</p>-->
+            <p onclick="openSettingsPage(this)" class="settingsSelectable" pagename="storage">Storage</p>
+
+            <div onclick="handleSignoutButton()" class="settingsButton userSignoutButton">
+                <div>
+                    <svg>
+                        <use href="https://perfectaplan.com/res/map.svg#signOut"></use>
+                    </svg>
+                </div>
+                <p>Log Out</p>
+            </div>
+        </div>
+        <div id="yourSettingsContent">
+            <div pagename="account">
+                <h1>Your Account</h1>
+                <div id="accountSettingsDiv" class="subSettingsDiv">
+                    <div id="settingsUserProfileImageDiv">
+                        <img onclick="changeUserProfileImage()" id="settingsUserProfileImage" class="userProfileImage"
+                            src="https://perfectaplan.com/res/unknownUser.png" alt="Your Profile Image">
+                        <p>Change</p>
+                    </div>
+                    <div>
+                        <div>
+                            <h3>Username</h3>
+                            <div class="fancyInputField">
+                                <svg>
+                                    <use href="https://perfectaplan.com/res/map.svg#user"></use>
+                                </svg>
+                                <div></div>
+                                <input id="settingsUsernameInput" placeholder="Enter a new username..."
+                                    onkeydown="handleAccountSetting('username', event.key === 'Enter', true)"
+                                    onkeyup="handleAccountSetting('username', false, true)"
+                                    onblur="handleAccountSetting('username', false)" autocomplete="off">
+                            </div>
+                            <div class="warning">
+                                <svg>
+                                    <use href="https://perfectaplan.com/res/map.svg#warning"></use>
+                                </svg>
+                                <p></p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Email</h3>
+                            <div class="fancyInputField">
+                                <svg>
+                                    <use href="https://perfectaplan.com/res/map.svg#email"></use>
+                                </svg>
+                                <div></div>
+                                <input id="settingsEmailInput" placeholder="Enter a new email..."
+                                    onkeydown="handleAccountSetting('email', event.key === 'Enter', true)"
+                                    onkeyup="handleAccountSetting('email', false, true)"
+                                    onblur="handleAccountSetting('email', false)" type="email" autocomplete="email">
+                            </div>
+                            <div class="warning">
+                                <svg>
+                                    <use href="https://perfectaplan.com/res/map.svg#warning"></use>
+                                </svg>
+                                <p></p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Password</h3>
+                            <div class="fancyInputField">
+                                <svg>
+                                    <use href="https://perfectaplan.com/res/map.svg#padlock"></use>
+                                </svg>
+                                <div></div>
+                                <input id="settingsPasswordInput" placeholder="Enter a new password..."
+                                    onkeydown="handleAccountSetting('password', event.key === 'Enter', true)"
+                                    onkeyup="handleAccountSetting('password', false, true)"
+                                    onblur="handleAccountSetting('password', false)" type="password"
+                                    autocomplete="new-password">
+                            </div>
+                            <div class="warning">
+                                <svg>
+                                    <use href="https://perfectaplan.com/res/map.svg#warning"></use>
+                                </svg>
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="securityCheckSetting" class="settingsToggle fancyToggleDescription" refname="securityCheck">
+                    <div class="fancyToggle">
+                    </div>
+                    <div>
+                        <h1>Security Check</h1>
+                        <p>Before deleting projects or spaces, require your password to be input.</p>
+                    </div>
+                </div>
+                <div class="settingsDivider"></div>
+                <h2 id="scrollToAppearanceSection">Your Color Theme</h2>
+                <div id="settingsAccentColorsDiv" class="subSettingsDiv"></div>
+                <div class="settingsDivider"></div>
+                <div class="settingsToggle fancyToggleDescription" refname="dark">
+                    <div class="fancyToggle">
+                    </div>
+                    <div>
+                        <h1>Dark Mode</h1>
+                        <p>Don't like eye strain? Turn to the dark side of PerfectAPlan™.</p>
+                    </div>
+                </div>
+                <div class="settingsDivider"></div>
+                <h2>Time Settings</h2>
+                <h4 id="settingsTimeFormatHeader">Time Format</h4>
+                <div id="settingsTimeFormat" class="fancyMultiChoice">
+                    <div refname="1">
+                        <p>12 hour</p>
+                    </div>
+                    <div refname="2">
+                        <p>24 hour</p>
+                    </div>
+                </div>
+                <h4>Date Format</h4>
+                <div id="settingsDateFormat" class="fancyMultiChoice">
+                    <div refname="1">
+                        <p>M/D/Y</p>
+                    </div>
+                    <div refname="2">
+                        <p>D/M/Y</p>
+                    </div>
+                </div>
+                <h2>Zoom</h2>
+                <div id="settingsZoomDiv">
+                    <div class="fancyMultiChoice">
+                        <div refname="s">
+                            <p>Spacious</p>
+                        </div>
+                        <div refname="n">
+                            <p>Normal</p>
+                        </div>
+                        <div refname="l">
+                            <p>Cozy</p>
+                        </div>
+                        <div refname="c">
+                            <p>Custom</p>
+                        </div>
+                    </div>
+                    <div id="editCustomZoomSetting">
+                        <svg onclick="customChangeZoomButtonHandler(false)">
+                            <use href="https://perfectaplan.com/res/map.svg#minus"></use>
+                        </svg>
+                        <p id="settingsZoomText">100%</p>
+                        <svg onclick="customChangeZoomButtonHandler(true)">
+                            <use href="https://perfectaplan.com/res/map.svg#add"></use>
+                        </svg>
+                    </div>
+                </div>
+                <h1>Preferences</h1>
+                <div class="settingsToggle fancyToggleDescription" refname="enableAnimation">
+                    <div class="fancyToggle">
+                    </div>
+                    <div>
+                        <h1>Animations</h1>
+                        <p>Enables animations between states. See examples: left is on, right is off.</p>
+                        <div>
+                            <svg id="iconAnimationExample">
+                                <use href="https://perfectaplan.com/res/map.svg#options"></use>
+                            </svg>
+                            <svg id="iconAnimationExample2">
+                                <use href="https://perfectaplan.com/res/map.svg#options"></use>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="settingsDivider"></div>
+                <div class="settingsToggle fancyToggleDescription" refname="iconPop">
+                    <div class="fancyToggle">
+                    </div>
+                    <div>
+                        <h1>Icon Pop</h1>
+                        <p>Enables icons "popping" out of the screen when hovered over. See examples: left is on, right
+                            is off.</p>
+                        <div>
+                            <svg id="iconPopExample">
+                                <use href="https://perfectaplan.com/res/map.svg#add"></use>
+                            </svg>
+                            <svg id="iconPopExample2">
+                                <use href="https://perfectaplan.com/res/map.svg#add"></use>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="settingsDivider"></div>
+                <div class="settingsToggle fancyToggleDescription" refname="dullColors">
+                    <div class="fancyToggle">
+                    </div>
+                    <div>
+                        <h1>Dull Colors</h1>
+                        <p>Desaturates all color on the site. Best paired with Dark Mode off, but works with both.</p>
+                    </div>
+                </div>
+                <div class="settingsDivider"></div>
+            </div>
+            <!--                <div pagename="notifications">-->
+            <!--                    <h1>TODO: Notifications Settings</h1>-->
+            <!--                </div>-->
+            <div pagename="storage" id="settingsStorageContent">
+                <h1>Storage</h1>
+                <p>PerfectAPlan uses Local Storage to cache task data & remember you when you come back.</p>
+                <div id="clearStorage" onclick="handleClearStorageButton()">
+                    <div>
+                        <svg>
+                            <use href="https://perfectaplan.com/res/map.svg#delete"></use>
+                        </svg>
+                    </div>
+                    <p>Clear Storage</p>
+                </div>
+            </div>
+        </div>
+        <div id="yourSettingsSaveContainer">
+            <div>
+                <button id="yourSettingsRevert" onclick="handleUserSettingsSaveButton(false)">
+                    <svg>
+                        <use href="https://perfectaplan.com/res/map.svg#undo"></use>
+                    </svg>
+                    <p>Revert</p>
+                </button>
+                <button id="yourSettingsSave" onclick="handleUserSettingsSaveButton(true)">Save</button>
+            </div>
+        </div>
+    </div>
+    <div id="dropdownContainer">
+        <div class="dropdownBackground" id="dropdownBackgroundIn">
+
+        </div>
+        <div class="dropdownBackground" id="dropdownBackgroundOut">
+
+        </div>
+    </div>
+    <div id="promptContainer">
+        <div id="promptBackground">
+
+        </div>
+    </div>
+</body>
+
+</html>
